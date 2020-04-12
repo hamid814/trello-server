@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const ListSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, 'please add name to board'],
+    required: [true, 'please add title for list'],
   },
   watching: {
     type: Boolean,

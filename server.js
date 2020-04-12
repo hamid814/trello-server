@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 // route files
 const boards = require('./routes/boards');
 const lists = require('./routes/lists');
+const cards = require('./routes/cards');
 
 // Init app
 const app = express();
@@ -31,6 +32,7 @@ app.use(express.static('public'));
 // routes
 app.use('/api/boards', boards);
 app.use('/api/lists', lists);
+app.use('/api/cards', cards);
 
 // costum error handler
 app.use(errorHandler);
