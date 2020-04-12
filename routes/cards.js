@@ -1,4 +1,5 @@
 const express = require('express');
+const { protect } = require('../middleware/auth');
 const {
   getCard,
   addCard,
@@ -8,9 +9,9 @@ const {
 
 const router = express.Router();
 
-router.post('/', addCard);
-router.get('/:id', getCard);
-router.put('/:id', updateCard);
-router.delete('/:id', deleteCard);
+router.post('/', protect, addCard);
+router.get('/:id', protect, getCard);
+router.put('/:id', protect, updateCard);
+router.delete('/:id', protect, deleteCard);
 
 module.exports = router;

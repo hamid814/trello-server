@@ -59,8 +59,6 @@ exports.logout = asyncHandler(async (req, res, next) => {
 // @desc       get the logged in user
 // @acces      Private
 exports.getMe = asyncHandler(async (req, res, next) => {
-  console.log(req.user);
-
   const user = await User.findById(req.user.id);
 
   res.status(200).json({

@@ -1,4 +1,5 @@
 const express = require('express');
+const { protect } = require('../middleware/auth');
 const {
   getBoards,
   getBoard,
@@ -15,10 +16,10 @@ const router = express.Router();
 // Re-route into other resource routers
 router.use('/:boardId/lists', listsRouter);
 
-router.get('/', getBoards);
-router.post('/', addBoard);
-router.get('/:id', getBoard);
-router.put('/:id', updateBoard);
-router.delete('/:id', deleteBoard);
+router.get('/', protect, getBoards);
+router.post('/', protect, addBoard);
+router.get('/:id', protect, getBoard);
+router.put('/:id', protect, updateBoard);
+router.delete('/:id', protect, deleteBoard);
 
 module.exports = router;

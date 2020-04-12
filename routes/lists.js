@@ -1,4 +1,5 @@
 const express = require('express');
+const { protect } = require('../middleware/auth');
 const {
   getLists,
   getList,
@@ -9,10 +10,10 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', getLists);
-router.post('/', addList);
-router.get('/:id', getList);
-router.put('/:id', updateList);
-router.delete('/:id', deleteList);
+router.get('/', protect, getLists);
+router.post('/', protect, addList);
+router.get('/:id', protect, getList);
+router.put('/:id', protect, updateList);
+router.delete('/:id', protect, deleteList);
 
 module.exports = router;
