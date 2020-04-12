@@ -29,3 +29,5 @@ exports.logout = asyncHandler(async (req, res, next) => {
 exports.getMe = asyncHandler(async (req, res, next) => {
   res.send('get the logged in user');
 });
+
+// test for github Bot ( telegram )
