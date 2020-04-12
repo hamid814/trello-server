@@ -9,6 +9,7 @@ const boards = require('./routes/boards');
 const lists = require('./routes/lists');
 const cards = require('./routes/cards');
 const labels = require('./routes/labels');
+const auth = require('./routes/auth');
 
 // Init app
 const app = express();
@@ -35,6 +36,7 @@ app.use('/api/boards', boards);
 app.use('/api/lists', lists);
 app.use('/api/cards', cards);
 app.use('/api/labels', labels);
+app.use('/api/auth', auth);
 
 // costum error handler
 app.use(errorHandler);
