@@ -19,7 +19,12 @@ exports.getBoards = asyncHandler(async (req, res, next) => {
 // @desc       get a single board
 // @acces      Private
 exports.getBoard = asyncHandler(async (req, res, next) => {
-  const board = await Board.findById(req.params.id).populate('lists');
+  const board = await Board.findById(req.params.id).populate({
+    path: 'lists',
+    populate: {
+      path: 'items',
+    },
+  });
 
   if (!board) {
     return next(new ErrorResponse(404, 'board not found'));
