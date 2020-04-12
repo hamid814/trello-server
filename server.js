@@ -8,6 +8,7 @@ const connectDB = require('./config/db');
 const boards = require('./routes/boards');
 const lists = require('./routes/lists');
 const cards = require('./routes/cards');
+const labels = require('./routes/labels');
 
 // Init app
 const app = express();
@@ -33,6 +34,7 @@ app.use(express.static('public'));
 app.use('/api/boards', boards);
 app.use('/api/lists', lists);
 app.use('/api/cards', cards);
+app.use('/api/labels', labels);
 
 // costum error handler
 app.use(errorHandler);
