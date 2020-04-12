@@ -6,6 +6,7 @@ const errorHandler = require('./middleware/errorHandler');
 const connectDB = require('./config/db');
 // route files
 const boards = require('./routes/boards');
+const lists = require('./routes/lists');
 
 // Init app
 const app = express();
@@ -25,10 +26,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Add static files
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 // routes
 app.use('/api/boards', boards);
+app.use('/api/lists', lists);
 
 // costum error handler
 app.use(errorHandler);

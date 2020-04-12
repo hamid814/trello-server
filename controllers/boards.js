@@ -19,7 +19,7 @@ exports.getBoards = asyncHandler(async (req, res, next) => {
 // @desc       get a single board
 // @acces      Private
 exports.getBoard = asyncHandler(async (req, res, next) => {
-  const board = await Board.findById(req.params.id);
+  const board = await Board.findById(req.params.id).populate('lists');
 
   if (!board) {
     return next(new ErrorResponse(404, 'board not found'));
@@ -47,12 +47,37 @@ exports.addBoard = asyncHandler(async (req, res, next) => {
 // @desc       update a board
 // @acces      Private
 exports.updateBoard = asyncHandler(async (req, res, next) => {
-  res.send('update board');
+  let board = Board.findById(req.params.id);
+
+  if (!board) {
+    return next(new ErrorResponse(404, 'board not found'));
+  }
+
+  board = await Board.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: board,
+  });
 });
 
 // @route      DELETE /api/boards/:id
 // @desc       delete a board
 // @acces      Private
 exports.deleteBoard = asyncHandler(async (req, res, next) => {
-  res.send('delete board');
+  const board = await Board.findById(req.params.id);
+
+  if (!board) {
+    return next(new ErrorResponse(404, 'board not found'));
+  }
+
+  await board.remove();
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
 });
