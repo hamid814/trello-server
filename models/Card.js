@@ -9,7 +9,10 @@ const CardSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  desc: String,
+  desc: {
+    type: String,
+    default: '',
+  },
   board: {
     type: mongoose.Schema.ObjectId,
     ref: 'Board',

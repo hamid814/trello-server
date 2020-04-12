@@ -37,7 +37,7 @@ exports.addCard = asyncHandler(async (req, res, next) => {
 // @desc       update a card
 // @acces      Private
 exports.updateCard = asyncHandler(async (req, res, next) => {
-  let card = Card.findById(req.params.id);
+  let card = await Card.findById(req.params.id);
 
   if (!card) {
     return next(new ErrorResponse(404, 'card not found'));

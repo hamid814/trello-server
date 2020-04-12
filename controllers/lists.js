@@ -75,7 +75,7 @@ exports.addList = asyncHandler(async (req, res, next) => {
 // @desc       update a list
 // @acces      Private
 exports.updateList = asyncHandler(async (req, res, next) => {
-  let list = List.findById(req.params.id);
+  let list = await List.findById(req.params.id);
 
   if (!list) {
     return next(new ErrorResponse(404, 'list not found'));
