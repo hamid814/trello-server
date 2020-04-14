@@ -13,6 +13,7 @@ const CardSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  id: String,
   board: {
     type: mongoose.Schema.ObjectId,
     ref: 'Board',

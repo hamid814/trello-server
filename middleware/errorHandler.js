@@ -1,4 +1,6 @@
 const errorHandler = (err, req, res, next) => {
+  console.log(err);
+
   if (err.name === 'ValidationError') {
     err.message = Object.values(err.errors).map((val) => val.message);
     err.status = 400;

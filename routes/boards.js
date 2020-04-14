@@ -7,6 +7,7 @@ const {
   updateBoard,
   deleteBoard,
   deleteAllBoards,
+  clearBoard,
 } = require('../controllers/boards');
 
 // Include other resource routers
@@ -22,6 +23,7 @@ router.post('/', addBoard);
 router.get('/:id', getBoard);
 router.put('/:id', updateBoard);
 router.delete('/all', deleteAllBoards);
+router.delete('/:id/clear', clearBoard);
 router.delete('/:id', deleteBoard);
 
 module.exports = router;

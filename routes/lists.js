@@ -6,14 +6,16 @@ const {
   addList,
   updateList,
   deleteList,
+  clearList,
 } = require('../controllers/lists');
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', protect, getLists);
-router.post('/', protect, addList);
-router.get('/:id', protect, getList);
-router.put('/:id', protect, updateList);
-router.delete('/:id', protect, deleteList);
+router.get('/', getLists);
+router.post('/', addList);
+router.get('/:id', getList);
+router.put('/:id', updateList);
+router.delete('/:id', deleteList);
+router.delete('/:id/clear', clearList);
 
 module.exports = router;

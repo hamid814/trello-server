@@ -27,9 +27,22 @@ exports.addCard = asyncHandler(async (req, res, next) => {
 
   const card = await Card.create(req.body);
 
+  card.id = card._id;
+
   res.status(201).json({
     success: true,
     data: card,
+  });
+});
+
+// @route      PUT /api/cards/updatemany
+// @desc       update a group of cards
+// @acces      Private
+exports.updateManyCards = asyncHandler(async (req, res, next) => {
+  const cards = await Card.updateMany(req.body.find, req.body.update);
+
+  res.status(200).json({
+    success: true,
   });
 });
 
@@ -47,6 +60,8 @@ exports.updateCard = asyncHandler(async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+
+  card.id = card._id;
 
   res.status(200).json({
     success: true,

@@ -1,7 +1,8 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
-const List = require('../models/List');
 const Board = require('../models/Board');
+const List = require('../models/List');
+const Card = require('../models/Card');
 
 // @route      GET /api/board/:boardId/lists
 // @route      GET /api/lists  ( this route returns error )
@@ -52,7 +53,7 @@ exports.getList = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @route      POST /api/board/:boardId/lists
+// @route      POST /api/boards/:boardId/lists
 // @route      POST /api/lists ( this route returns error )
 // @desc       add a list to a board
 // @acces      Private
@@ -64,6 +65,8 @@ exports.addList = asyncHandler(async (req, res, next) => {
   req.body.board = req.params.boardId;
 
   const list = await List.create(req.body);
+
+  list.items = [];
 
   res.status(201).json({
     success: true,
@@ -89,6 +92,18 @@ exports.updateList = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: list,
+  });
+});
+
+// @route      DELETE /api/list/:id/clear
+// @desc       delete all cards in a list
+// @acces      Private
+exports.clearList = asyncHandler(async (req, res, next) => {
+  await Card.deleteMany({ list: req.params.id });
+
+  res.status(200).json({
+    success: true,
+    data: {},
   });
 });
 

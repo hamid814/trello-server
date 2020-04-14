@@ -27,4 +27,12 @@ ListSchema.virtual('items', {
   justOne: false,
 });
 
+// Cascade delete cards when a list as deleted
+ListSchema.pre('remove', async function (next) {
+  console.log(`deleting cards from list ${this.id}`);
+  await this.model('Card').deleteMany({ list: this._id });
+
+  next();
+});
+
 module.exports = mongoose.model('List', ListSchema);

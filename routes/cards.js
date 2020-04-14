@@ -4,14 +4,16 @@ const {
   getCard,
   addCard,
   updateCard,
+  updateManyCards,
   deleteCard,
 } = require('../controllers/cards');
 
 const router = express.Router();
 
-router.post('/', protect, addCard);
-router.get('/:id', protect, getCard);
-router.put('/:id', protect, updateCard);
-router.delete('/:id', protect, deleteCard);
+router.post('/', addCard);
+router.get('/:id', getCard);
+router.put('/updatemany', updateManyCards);
+router.put('/:id', updateCard);
+router.delete('/:id', deleteCard);
 
 module.exports = router;

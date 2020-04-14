@@ -1,6 +1,8 @@
 const asyncHandler = require('../middleware/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
 const Board = require('../models/Board');
+const List = require('../models/List');
+const Card = require('../models/Card');
 
 // @route      GET /api/boards
 // @desc       get all boards for a user
@@ -80,6 +82,19 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @route      DELETE /api/boards/:id/clear
+// @desc       clear lists and cards from a board
+// @acces      Private
+exports.clearBoard = asyncHandler(async (req, res, next) => {
+  await List.deleteMany({ board: req.params.id });
+  await Card.deleteMany({ board: req.params.id });
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
 // @route      DELETE /api/boards/:id
 // @desc       delete a board
 // @acces      Private
@@ -102,7 +117,14 @@ exports.deleteBoard = asyncHandler(async (req, res, next) => {
 // @desc       delete all boards for a user
 // @acces      Private
 exports.deleteAllBoards = asyncHandler(async (req, res, next) => {
-  console.log('here');
+  const boards = await Board.find();
+
+  // cascade delete lists and card from boards
+  boards.forEach(async (board) => {
+    await List.deleteMany({ board: board._id });
+    await Card.deleteMany({ board: board._id });
+  });
+
   await Board.deleteMany();
 
   res.status(200).json({

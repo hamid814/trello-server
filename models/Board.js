@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const List = require('./List');
 
 const BoardSchema = new mongoose.Schema(
   {
@@ -32,6 +33,22 @@ BoardSchema.virtual('lists', {
   localField: '_id',
   foreignField: 'board',
   justOne: false,
+});
+
+// Cascade delete cards when a board is deleted
+BoardSchema.pre('remove', async function (next) {
+  console.log(`Cards being removed from board ${this._id}`);
+  await this.model('Card').deleteMany({ board: this._id });
+
+  next();
+});
+
+// Cascade delete lists when a board is deleted
+BoardSchema.pre('remove', async function (next) {
+  console.log(`Lists being removed from board ${this._id}`);
+  await List.deleteMany({ board: this._id });
+
+  next();
 });
 
 module.exports = mongoose.model('Board', BoardSchema);
