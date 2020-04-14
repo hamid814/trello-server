@@ -6,6 +6,7 @@ const {
   addBoard,
   updateBoard,
   deleteBoard,
+  deleteAllBoards,
 } = require('../controllers/boards');
 
 // Include other resource routers
@@ -16,10 +17,11 @@ const router = express.Router();
 // Re-route into other resource routers
 router.use('/:boardId/lists', listsRouter);
 
-router.get('/', protect, getBoards);
-router.post('/', protect, addBoard);
-router.get('/:id', protect, getBoard);
-router.put('/:id', protect, updateBoard);
-router.delete('/:id', protect, deleteBoard);
+router.get('/', getBoards);
+router.post('/', addBoard);
+router.get('/:id', getBoard);
+router.put('/:id', updateBoard);
+router.delete('/all', deleteAllBoards);
+router.delete('/:id', deleteBoard);
 
 module.exports = router;

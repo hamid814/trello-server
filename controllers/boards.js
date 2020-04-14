@@ -6,7 +6,12 @@ const Board = require('../models/Board');
 // @desc       get all boards for a user
 // @acces      Private
 exports.getBoards = asyncHandler(async (req, res, next) => {
-  const boards = await Board.find();
+  const boards = await Board.find().populate({
+    path: 'lists',
+    populate: {
+      path: 'items',
+    },
+  });
 
   res.status(200).json({
     success: true,
@@ -19,6 +24,10 @@ exports.getBoards = asyncHandler(async (req, res, next) => {
 // @desc       get a single board
 // @acces      Private
 exports.getBoard = asyncHandler(async (req, res, next) => {
+  if (!req.params.id || req.params.id == 'null') {
+    return next(new ErrorResponse(400, 'please a an id'));
+  }
+
   const board = await Board.findById(req.params.id).populate({
     path: 'lists',
     populate: {
@@ -41,6 +50,8 @@ exports.getBoard = asyncHandler(async (req, res, next) => {
 // @acces      Private
 exports.addBoard = asyncHandler(async (req, res, next) => {
   const board = await Board.create(req.body);
+
+  board.lists = [];
 
   res.status(201).json({
     success: true,
@@ -80,6 +91,19 @@ exports.deleteBoard = asyncHandler(async (req, res, next) => {
   }
 
   await board.remove();
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
+
+// @route      DELETE /api/boards/all
+// @desc       delete all boards for a user
+// @acces      Private
+exports.deleteAllBoards = asyncHandler(async (req, res, next) => {
+  console.log('here');
+  await Board.deleteMany();
 
   res.status(200).json({
     success: true,

@@ -10,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.route('/').get(protect, getLabels).post(protect, addLabel);
+router.route('/').get(getLabels).post(protect, addLabel);
 
 router
   .route('/:id')

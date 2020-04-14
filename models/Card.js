@@ -23,6 +23,14 @@ const CardSchema = new mongoose.Schema({
     ref: 'List',
     required: true,
   },
+  labels: {
+    type: [mongoose.Schema.ObjectId],
+    default: [],
+  },
+  checklists: {
+    type: Array,
+    default: [],
+  },
   listId: String,
   boardId: String,
 });
