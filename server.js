@@ -41,6 +41,14 @@ app.use('/api/auth', auth);
 // costum error handler
 app.use(errorHandler);
 
+const works = [
+  'on label model pre remove => find cards with id of user to find faster',
+];
+
+if (process.env.NODE_ENV === 'development') {
+  works.forEach((w) => console.log(w.magenta));
+}
+
 const PORT = process.env.PORT || 5000;
 
 // Listen to port and log it
