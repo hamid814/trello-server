@@ -14,6 +14,11 @@ const CardSchema = new mongoose.Schema({
     default: '',
   },
   id: String,
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   board: {
     type: mongoose.Schema.ObjectId,
     ref: 'Board',

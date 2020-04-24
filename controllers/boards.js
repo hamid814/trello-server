@@ -8,7 +8,7 @@ const Card = require('../models/Card');
 // @desc       get all boards for a user
 // @acces      Private
 exports.getBoards = asyncHandler(async (req, res, next) => {
-  const boards = await Board.find().populate({
+  const boards = await Board.find({ user: req.user._id }).populate({
     path: 'lists',
     populate: {
       path: 'items',
@@ -41,6 +41,10 @@ exports.getBoard = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'board not found'));
   }
 
+  if (String(board.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'Not Your baord'));
+  }
+
   res.status(200).json({
     success: true,
     data: board,
@@ -51,6 +55,8 @@ exports.getBoard = asyncHandler(async (req, res, next) => {
 // @desc       add a board
 // @acces      Private
 exports.addBoard = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user._id;
+
   const board = await Board.create(req.body);
 
   board.lists = [];
@@ -71,6 +77,10 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'board not found'));
   }
 
+  if (String(board.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'Not Your baord'));
+  }
+
   board = await Board.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -86,6 +96,12 @@ exports.updateBoard = asyncHandler(async (req, res, next) => {
 // @desc       clear lists and cards from a board
 // @acces      Private
 exports.clearBoard = asyncHandler(async (req, res, next) => {
+  const board = await Board.findById(req.params.id);
+
+  if (String(board.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'Not Your baord'));
+  }
+
   await List.deleteMany({ board: req.params.id });
   await Card.deleteMany({ board: req.params.id });
 
@@ -105,6 +121,10 @@ exports.deleteBoard = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'board not found'));
   }
 
+  if (String(board.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'Not Your baord'));
+  }
+
   await board.remove();
 
   res.status(200).json({
@@ -117,7 +137,7 @@ exports.deleteBoard = asyncHandler(async (req, res, next) => {
 // @desc       delete all boards for a user
 // @acces      Private
 exports.deleteAllBoards = asyncHandler(async (req, res, next) => {
-  const boards = await Board.find();
+  const boards = await Board.find({ user: req.user._id });
 
   // cascade delete lists and card from boards
   boards.forEach(async (board) => {

@@ -10,10 +10,10 @@ const {
 
 const router = express.Router();
 
-router.post('/', addCard);
-router.get('/:id', getCard);
-router.put('/updatemany', updateManyCards);
-router.put('/:id', updateCard);
-router.delete('/:id', deleteCard);
+router.post('/', protect, addCard);
+router.get('/:id', protect, getCard);
+router.put('/updatemany', protect, updateManyCards);
+router.put('/:id', protect, updateCard);
+router.delete('/:id', protect, deleteCard);
 
 module.exports = router;

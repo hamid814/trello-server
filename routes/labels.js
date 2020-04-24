@@ -10,8 +10,12 @@ const {
 
 const router = express.Router();
 
-router.route('/').get(getLabels).post(addLabel);
+router.route('/').get(protect, getLabels).post(protect, addLabel);
 
-router.route('/:id').get(getLabel).put(updateLabel).delete(deleteLabel);
+router
+  .route('/:id')
+  .get(protect, getLabel)
+  .put(protect, updateLabel)
+  .delete(protect, deleteLabel);
 
 module.exports = router;

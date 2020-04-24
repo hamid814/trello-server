@@ -4,7 +4,7 @@ const Board = require('../models/Board');
 const List = require('../models/List');
 const Card = require('../models/Card');
 
-// @route      GET /api/board/:boardId/lists
+// @route      GET /api/boards/:boardId/lists
 // @route      GET /api/lists  ( this route returns error )
 // @desc       get all lists for a board
 // @acces      Private
@@ -15,7 +15,10 @@ exports.getLists = asyncHandler(async (req, res, next) => {
   }
 
   // check if board exists
-  const board = await Board.findById(req.params.boardId);
+  const board = await Board.exists({
+    _id: req.params.boardId,
+    user: req.user._id,
+  });
 
   if (!board) {
     return next(new ErrorResponse(404, 'board not found'));
@@ -45,6 +48,10 @@ exports.getList = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'list not found'));
   }
 
+  if (String(list.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'not Allowed'));
+  }
+
   list.boardId = list.board._id;
 
   res.status(200).json({
@@ -63,6 +70,7 @@ exports.addList = asyncHandler(async (req, res, next) => {
   }
 
   req.body.board = req.params.boardId;
+  req.body.user = req.user._id;
 
   const list = await List.create(req.body);
 
@@ -84,6 +92,10 @@ exports.updateList = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'list not found'));
   }
 
+  if (String(req.user._id) !== String(list.user)) {
+    return next(new ErrorResponse(401, 'Not Allowed'));
+  }
+
   list = await List.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -99,6 +111,12 @@ exports.updateList = asyncHandler(async (req, res, next) => {
 // @desc       delete all cards in a list
 // @acces      Private
 exports.clearList = asyncHandler(async (req, res, next) => {
+  const list = await List.findById(req.params.id);
+
+  if (String(req.user._id) !== String(list.user)) {
+    return next(new ErrorResponse(401, 'Not Allowed'));
+  }
+
   await Card.deleteMany({ list: req.params.id });
 
   res.status(200).json({
@@ -115,6 +133,10 @@ exports.deleteList = asyncHandler(async (req, res, next) => {
 
   if (!list) {
     return next(new ErrorResponse(404, 'list not found'));
+  }
+
+  if (String(req.user._id) !== String(list.user)) {
+    return next(new ErrorResponse(401, 'Not Allowed'));
   }
 
   await list.remove();

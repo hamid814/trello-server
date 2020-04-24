@@ -11,11 +11,11 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
-router.get('/', getLists);
-router.post('/', addList);
-router.get('/:id', getList);
-router.put('/:id', updateList);
-router.delete('/:id', deleteList);
-router.delete('/:id/clear', clearList);
+router.get('/', protect, getLists);
+router.post('/', protect, addList);
+router.get('/:id', protect, getList);
+router.put('/:id', protect, updateList);
+router.delete('/:id', protect, deleteList);
+router.delete('/:id/clear', protect, clearList);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const Label = require('../models/Label');
 // @route     GET /api/labels
 // @access    Private
 exports.getLabels = asyncHandler(async (req, res, next) => {
-  const labels = await Label.find();
+  const labels = await Label.find({ user: req.user._id });
 
   res.status(200).json({
     success: true,
@@ -25,6 +25,10 @@ exports.getLabel = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'Label not found'));
   }
 
+  if (String(label.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(401, 'Not Allowed'));
+  }
+
   res.status(200).json({
     success: true,
     data: label,
@@ -35,6 +39,8 @@ exports.getLabel = asyncHandler(async (req, res, next) => {
 // @route       POST /api/labels
 // @access      private
 exports.addLabel = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user._id;
+
   const label = await Label.create(req.body);
 
   res.status(201).json({
@@ -51,6 +57,10 @@ exports.updateLabel = asyncHandler(async (req, res, next) => {
 
   if (!label) {
     return next(new ErrorResponse(404, "label doesn't exist"));
+  }
+
+  if (String(label.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(404, 'not allowed'));
   }
 
   label = await Label.findByIdAndUpdate(req.params.id, req.body, {
@@ -72,6 +82,10 @@ exports.deleteLabel = asyncHandler(async (req, res, next) => {
 
   if (!label) {
     return next(new ErrorResponse(404, "label doesn't exist"));
+  }
+
+  if (String(label.user) !== String(req.user._id)) {
+    return next(new ErrorResponse(404, 'not allowed'));
   }
 
   await label.remove();

@@ -23,6 +23,11 @@ const BoardSchema = new mongoose.Schema(
       type: String,
       maxlength: 250,
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: [true, 'board must be bounded with a user'],
+    },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );

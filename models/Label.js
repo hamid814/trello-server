@@ -14,6 +14,11 @@ const LabelSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 });
 
 // Cascade update cards when a label is deleted

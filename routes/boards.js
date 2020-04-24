@@ -18,12 +18,12 @@ const router = express.Router();
 // Re-route into other resource routers
 router.use('/:boardId/lists', listsRouter);
 
-router.get('/', getBoards);
-router.post('/', addBoard);
-router.get('/:id', getBoard);
-router.put('/:id', updateBoard);
-router.delete('/all', deleteAllBoards);
-router.delete('/:id/clear', clearBoard);
-router.delete('/:id', deleteBoard);
+router.get('/', protect, getBoards);
+router.post('/', protect, addBoard);
+router.get('/:id', protect, getBoard);
+router.put('/:id', protect, updateBoard);
+router.delete('/all', protect, deleteAllBoards);
+router.delete('/:id/clear', protect, clearBoard);
+router.delete('/:id', protect, deleteBoard);
 
 module.exports = router;
