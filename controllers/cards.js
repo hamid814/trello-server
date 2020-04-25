@@ -115,7 +115,7 @@ exports.deleteCard = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, 'card not found'));
   }
 
-  if (String(req.user._id) !== card.user) {
+  if (String(req.user._id) !== String(card.user)) {
     return next(new ErrorResponse(401, 'your not allowed to delete this card'));
   }
 
